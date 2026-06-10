@@ -1,0 +1,62 @@
+{
+  "next": "https://project-gutenberg-books-api.p.rapidapi.com/books?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": 1342,
+      "title": "Pride and Prejudice",
+      "alternative_title": null,
+      "authors": [
+        {
+          "id": 419,
+          "name": "Austen, Jane"
+        }
+      ],
+      "subjects": [
+        "Courtship -- Fiction",
+        "England -- Fiction",
+        "Love stories"
+      ],
+      "bookshelves": [
+        "Best Books Ever Listings",
+        "Harvard Classics"
+      ],
+      "languages": [],
+      "media_type": "Text",
+      "download_count": 62904,
+      "issued": "1998-06-01T00:00:00.000Z",
+      "reading_ease_score": "69.20",
+      "cover_image": "https://www.gutenberg.org/cache/epub/1342/pg1342.cover.medium.jpg",
+      "removed_from_catalog": null,
+      "is_available": true
+    },
+    {
+      "id": 74,
+      "title": "The Adventures of Tom Sawyer, Complete",
+      "alternative_title": null,
+      "authors": [
+        {
+          "id": 212,
+          "name": "Twain, Mark"
+        }
+      ],
+      "subjects": [
+        "Adventure stories",
+        "Boys -- Fiction",
+        "Missouri -- Fiction"
+      ],
+      "bookshelves": [
+        "Category: Adventure",
+        "Category: American Literature"
+      ],
+      "languages": [],
+      "media_type": "Text",
+      "download_count": 54204,
+      "issued": "2004-07-01T00:00:00.000Z",
+      "reading_ease_score": "81.20",
+      "cover_image": "http://www.gutenberg.org/files/74/74-h/images/cover.jpg",
+      "removed_from_catalog": null,
+      "is_available": true
+    }
+  ]
+}

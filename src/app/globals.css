@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #7782fb 0%, #c1c0fb 100%);
+  --secondary-gradient:linear-gradient(135deg, #dfa8fd 0%, #f7d7ff 100%);
+  --background-gradient: linear-gradient(135deg, #aee3fa 0%, #d7ecf6 100%);
+  --text-color: #333333;
+}
+
+@theme inline {
+  --background-image-gradient-primary: var(--primary-gradient);
+  --background-image-gradient-secondary: var(--secondary-gradient);
+  --color-text: var(--text-color);
+  --background-image-gradient-background: var(--background);
+}
+
+body {
+  background: var(--background-gradient);
+  color: var(--text-color);
+  font-family: Roboto;
+  * {
+    border-color: var(--text-color);
+  }
+  select { font-family: Roboto; background-color: var(--primary-color);}
+  option { font-family: Roboto; background-color: var(--primary-color);}
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  @media (max-width: 1200px) {
+    padding: 0 30px;
+  }
+}
