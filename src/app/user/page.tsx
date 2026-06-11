@@ -18,7 +18,6 @@ export default function UserPage() {
   useEffect(() => {
     if (!isLoggedIn) {
       router.push('/user/login');
-      return;
     }
 
     async function loadBooks() {

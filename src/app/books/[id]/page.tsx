@@ -7,7 +7,7 @@ import { RootState } from '@/store/store';
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import Button from '@/app/components/button';
-import { ReviewData } from "@/utils/types"
+import { Review } from "@/utils/types"
 
 
 export default function BookDetailPage() {
@@ -15,8 +15,8 @@ export default function BookDetailPage() {
   const user = useSelector((state: RootState) => state.user.current)
   const [book, setBook] = useState(null as BookType | null)
   const [isLoggedIn, setIsLoggedIn] = useState(checkIsLogged(user))
-  const [reviews, setReviews] = useState<ReviewData[]>([])
-  const [userReview, setUserReview] = useState<ReviewData | null>(null)
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [userReview, setUserReview] = useState<Review | null>(null)
   const [grade, setGrade] = useState(5)
   const [reviewText, setReviewText] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -39,7 +39,7 @@ export default function BookDetailPage() {
         const userReviewsData = await getUserReviews(userEmail)
         setReviews(userReviewsData)
 
-        const bookReview = userReviewsData.find((review: ReviewData) => review.book_id === parseInt(params.id))
+        const bookReview = userReviewsData.find((review: Review) => review.book_id === parseInt(params.id))
         if (bookReview) {
           setUserReview(bookReview)
           setGrade(bookReview.grade || 5)
@@ -65,7 +65,7 @@ export default function BookDetailPage() {
 
       const updatedReviews = await getUserReviews(userEmail)
       setReviews(updatedReviews)
-      const bookReview = updatedReviews.find((review: ReviewData) => review.book_id === parseInt(params.id))
+      const bookReview = updatedReviews.find((review: Review) => review.book_id === parseInt(params.id))
       if (bookReview) {
         setUserReview(bookReview)
       }
@@ -94,7 +94,7 @@ export default function BookDetailPage() {
       setSubmitSuccess(true)
       const updatedReviews = await getUserReviews(userEmail)
       setReviews(updatedReviews)
-      const bookReview = updatedReviews.find((review: ReviewData) => review.book_id === parseInt(params.id))
+      const bookReview = updatedReviews.find((review: Review) => review.book_id === parseInt(params.id))
       if (bookReview) {
         setUserReview(bookReview)
       }

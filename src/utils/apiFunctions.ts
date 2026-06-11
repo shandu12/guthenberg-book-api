@@ -2,8 +2,7 @@ import type { BookType, SearchParams, BooksApiResponse, RawBooksApiResponse, Raw
 import { getFirstElement } from './validation';
 import { createClient } from '@supabase/supabase-js';
 
-const NEXT_PUBLIC_BOOKS_API_URL = process.env.NEXT_PUBLIC_BOOKS_API_URL;
-
+// supabase initialization
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const supabaseServiceKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
@@ -11,6 +10,11 @@ const supabaseServiceKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
 if (!supabaseUrl || !supabaseKey || !supabaseServiceKey) {
     throw new Error('Missing Supabase environment variables');
 }
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+
+// guthenberg api initialization
+const NEXT_PUBLIC_BOOKS_API_URL = process.env.NEXT_PUBLIC_BOOKS_API_URL;
 
 const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -23,13 +27,7 @@ if (process.env.NEXT_PUBLIC_RAPIDAPI_KEY) {
     headers['x-rapidapi-key'] = process.env.NEXT_PUBLIC_RAPIDAPI_KEY;
 }
 
-
-// const supabase = createClient(supabaseUrl, supabaseKey);
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-
-/**
- * Transform raw API book data to BookType
- */
+// Transform raw API book data to BookType
 function transformBookData(bookData: RawBookData): BookType {
     return {
         id: bookData.id,
@@ -66,7 +64,6 @@ export async function getBooksList(filters: SearchParams = {}): Promise<BooksApi
         throw new Error('NEXT_PUBLIC_BOOKS_API_URL environment variable is not defined');
     }
     const queryString = buildQueryParams(filters);
-    console.log(queryString)
     const url = queryString ? `${NEXT_PUBLIC_BOOKS_API_URL}?${queryString}` : NEXT_PUBLIC_BOOKS_API_URL;
 
     const response = await fetch(url, {
@@ -119,35 +116,7 @@ export async function getBookById(id: string): Promise<BookType> {
     return transformBookData(bookData);
 }
 
-export async function getBooksByIds(ids: number[]): Promise<BookType[]> {
-    if (!NEXT_PUBLIC_BOOKS_API_URL) {
-        throw new Error('NEXT_PUBLIC_BOOKS_API_URL environment variable is not defined');
-    }
-
-    if (!Array.isArray(ids) || ids.length === 0) {
-        return [];
-    }
-
-    const queryString = buildQueryParams({ id: ids.join(',') } as any);
-    const url = `${NEXT_PUBLIC_BOOKS_API_URL}?${queryString}`;
-    const response = await fetch(url, {
-        method: 'GET',
-        headers,
-    });
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch books by IDs: ${response.status} ${response.statusText}`);
-    }
-
-    const data: RawBooksApiResponse = await response.json();
-
-    if (!Array.isArray(data.results)) {
-        throw new Error('Invalid API response: results is not an array');
-    }
-
-    return data.results.map(transformBookData);
-}
-
+// add book to catalogue
 export async function addBookToUserCatalogue(userEmail: string, bookId: number): Promise<void> {
     try {
         // Create an entry in the review table with the user ID and book ID
@@ -170,7 +139,7 @@ export async function addBookToUserCatalogue(userEmail: string, bookId: number):
         throw error;
     }
 }
-
+// get catalogue for user
 export async function getCatalogue(userEmail: string): Promise<number[]> {
     try {
         const { data, error } = await supabaseAdmin
@@ -198,12 +167,7 @@ export async function getCatalogue(userEmail: string): Promise<number[]> {
     }
 }
 
-/**
- * Validates user credentials against Supabase authentication
- * @param email - User email address
- * @param password - User password
- * @returns true if credentials are valid, false otherwise
- */
+// validate user credentials for login
 export async function validateCredentials(
     email: string,
     password: string
@@ -236,11 +200,7 @@ export async function validateCredentials(
     }
 }
 
-/**
- * Gets all reviews for a specific user
- * @param userEmail - User email address
- * @returns Array of reviews
- */
+// Gets all reviews for a specific user
 export async function getUserReviews(userEmail: string): Promise<Review[]> {
     try {
         const { data, error } = await supabaseAdmin
@@ -262,8 +222,6 @@ export async function getUserReviews(userEmail: string): Promise<Review[]> {
             book_id: item?.book_id,
             grade: item?.grade,
             text: item?.text,
-            created_at: item?.created_at,
-            updated_at: item?.updated_at,
         }));
     } catch (error) {
         console.error('getUserReviews error:', error);
@@ -271,14 +229,7 @@ export async function getUserReviews(userEmail: string): Promise<Review[]> {
     }
 }
 
-/**
- * Creates or updates a review for a user
- * @param userEmail - User email address
- * @param bookId - Book ID to review
- * @param grade - Grade (1-10)
- * @param text - Review text content
- * @returns The created or updated review object
- */
+// Creates or updates a review for a user
 export async function createReview(
     userEmail: string,
     bookId: number,
@@ -328,8 +279,6 @@ export async function createReview(
                 book_id: result?.book_id,
                 grade: result?.grade,
                 text: result?.text,
-                created_at: result?.created_at,
-                updated_at: result?.updated_at,
             };
         } else {
             const { data, error } = await supabaseAdmin
@@ -359,8 +308,6 @@ export async function createReview(
                 book_id: result?.book_id,
                 grade: result?.grade,
                 text: result?.text,
-                created_at: result?.created_at,
-                updated_at: result?.updated_at,
             };
         }
     } catch (error) {
@@ -369,12 +316,7 @@ export async function createReview(
     }
 }
 
-/**
- * Removes a review from the database
- * @param userEmail - User email address
- * @param bookId - Book ID to remove review for
- * @returns true if successfully deleted, false otherwise
- */
+// Removes a review from the database
 export async function deleteReview(
     userEmail: string,
     bookId: number

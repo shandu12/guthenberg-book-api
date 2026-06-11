@@ -24,7 +24,7 @@ export type User = {
   expiresAt?: number;
 }
 
-export type ReviewData = {
+export type Review = {
   id?: number;
   user_email: string;
   book_id: number;
@@ -64,10 +64,4 @@ export type RawBooksApiResponse = {
   next: string | null;
   previous: string | null;
   results: RawBookData[];
-}
-
-// Review types with proper typing
-export type Review = ReviewData & {
-  created_at?: string;
-  updated_at?: string;
 }
