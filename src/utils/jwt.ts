@@ -10,7 +10,6 @@ interface JWTPayload {
 
 /**
  * Generate a simple JWT token
- * Note: For production, use a proper JWT library like 'jsonwebtoken' or 'jose'
  */
 export function generateJWT(email: string, expiresInHours: number = 24): string {
   const header = {
