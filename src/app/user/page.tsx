@@ -37,6 +37,8 @@ export default function UserPage() {
         });
       } catch (error) {
         console.error('Failed to load catalogue', error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
